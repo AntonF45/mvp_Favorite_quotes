@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { 
-  Home, PlusCircle, Search, Settings, ArrowLeft, 
-  Palette, Monitor, Smartphone, Map
-} from 'lucide-react';
+import { IconHome, IconSearch, IconPlus, IconSettings, IconMap, IconSun, IconMoon } from './components/Icons';
 import Onboarding from './screens/Onboarding';
 import HomeScreen from './screens/HomeScreen';
 import AddQuote from './screens/AddQuote';
@@ -13,12 +10,10 @@ import SettingsScreen from './screens/SettingsScreen';
 import ScreenMap from './screens/ScreenMap';
 
 type Screen = 'onboarding' | 'home' | 'add' | 'card' | 'search' | 'settings' | 'map';
-type DesignVariant = 'minimal' | 'emotional';
 type ThemeMode = 'light' | 'dark';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('map');
-  const [designVariant, setDesignVariant] = useState<DesignVariant>('minimal');
   const [themeMode, setThemeMode] = useState<ThemeMode>('light');
   const [previousScreen, setPreviousScreen] = useState<Screen>('home');
 
@@ -27,223 +22,199 @@ export default function App() {
     setCurrentScreen(screen);
   };
 
-  const goBack = () => {
-    setCurrentScreen(previousScreen);
-  };
+  const goBack = () => setCurrentScreen(previousScreen);
 
-  const themeClasses = themeMode === 'light' 
-    ? 'bg-warm-bg text-warm-text' 
-    : 'bg-dark-bg text-dark-text';
+  const isLight = themeMode === 'light';
 
   const renderScreen = () => {
     switch (currentScreen) {
       case 'onboarding':
-        return <Onboarding variant={designVariant} theme={themeMode} onStart={() => navigate('home')} />;
+        return <Onboarding theme={themeMode} onStart={() => navigate('home')} />;
       case 'home':
-        return <HomeScreen variant={designVariant} theme={themeMode} onNavigate={navigate} />;
+        return <HomeScreen theme={themeMode} onNavigate={navigate} />;
       case 'add':
-        return <AddQuote variant={designVariant} theme={themeMode} onBack={goBack} onSave={() => navigate('home')} />;
+        return <AddQuote theme={themeMode} onBack={goBack} onSave={() => navigate('home')} />;
       case 'card':
-        return <QuoteCard variant={designVariant} theme={themeMode} onBack={goBack} />;
+        return <QuoteCard theme={themeMode} onBack={goBack} />;
       case 'search':
-        return <SearchScreen variant={designVariant} theme={themeMode} onBack={goBack} onNavigate={navigate} />;
+        return <SearchScreen theme={themeMode} onBack={goBack} onNavigate={navigate} />;
       case 'settings':
-        return <SettingsScreen variant={designVariant} theme={themeMode} onBack={goBack} />;
+        return <SettingsScreen theme={themeMode} onBack={goBack} />;
       case 'map':
-        return <ScreenMap variant={designVariant} theme={themeMode} onNavigate={navigate} />;
+        return <ScreenMap theme={themeMode} onNavigate={navigate} />;
       default:
-        return <HomeScreen variant={designVariant} theme={themeMode} onNavigate={navigate} />;
+        return <HomeScreen theme={themeMode} onNavigate={navigate} />;
     }
   };
 
+  const screenLabel: Record<Screen, string> = {
+    map: 'Карта экранов',
+    onboarding: 'Онбординг',
+    home: 'Главная',
+    add: 'Добавить цитату',
+    card: 'Карточка',
+    search: 'Поиск',
+    settings: 'Настройки',
+  };
+
   return (
-    <div className={`min-h-screen ${themeMode === 'light' ? 'bg-gray-100' : 'bg-gray-900'} transition-colors duration-300`}>
-      {/* Control Panel */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700 px-4 py-3">
-        <div className="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-3">
-          <h1 className="text-lg font-semibold text-gray-800 dark:text-white flex items-center gap-2">
-            <span className="text-2xl">📖</span> Любимые цитаты
-            <span className="text-xs font-normal text-gray-500 dark:text-gray-400 ml-2">Design Concept</span>
-          </h1>
-          
-          <div className="flex items-center gap-3 flex-wrap">
-            {/* Design Variant Toggle */}
-            <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
-              <button
-                onClick={() => setDesignVariant('minimal')}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                  designVariant === 'minimal' 
-                    ? 'bg-white dark:bg-gray-600 shadow text-deep-blue dark:text-amber' 
-                    : 'text-gray-600 dark:text-gray-300'
-                }`}
-              >
-                <Monitor size={12} className="inline mr-1" />
-                Минимализм
-              </button>
-              <button
-                onClick={() => setDesignVariant('emotional')}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                  designVariant === 'emotional' 
-                    ? 'bg-white dark:bg-gray-600 shadow text-deep-blue dark:text-amber' 
-                    : 'text-gray-600 dark:text-gray-300'
-                }`}
-              >
-                <Palette size={12} className="inline mr-1" />
-                Эмоциональный
-              </button>
+    <div className="min-h-screen bg-[#2a2825] text-[#e8e2d6] py-8 px-4">
+      {/* Top Control Bar */}
+      <div className="max-w-5xl mx-auto mb-8">
+        <div className="flex items-center justify-between flex-wrap gap-4 pb-6 border-b border-white/10">
+          <div>
+            <div className="flex items-baseline gap-3">
+              <span className="text-[10px] tracking-editorial uppercase text-[#b5afa6]">№ 01</span>
+              <h1 className="text-2xl font-editorial text-[#e8e2d6]">Любимые цитаты</h1>
             </div>
+            <p className="text-xs text-[#8a8580] mt-1 tracking-wide">
+              Telegram Mini App · Design Concept · 390 × 844
+            </p>
+          </div>
 
-            {/* Theme Toggle */}
-            <button
-              onClick={() => setThemeMode(themeMode === 'light' ? 'dark' : 'light')}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-            >
-              {themeMode === 'light' ? '🌙 Тёмная' : '☀️ Светлая'}
-            </button>
-
-            {/* Screen Map */}
+          <div className="flex items-center gap-2">
             <button
               onClick={() => navigate('map')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              className={`flex items-center gap-2 px-4 py-2 text-xs tracking-editorial uppercase transition-all border ${
                 currentScreen === 'map'
-                  ? 'bg-deep-blue text-white'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  ? 'bg-[#b87333] text-[#1c1c1c] border-[#b87333]'
+                  : 'bg-transparent text-[#b5afa6] border-white/10 hover:border-[#b87333]/50 hover:text-[#e8e2d6]'
               }`}
             >
-              <Map size={12} />
-              Карта экранов
+              <IconMap size={14} />
+              Карта
+            </button>
+            <button
+              onClick={() => setThemeMode(isLight ? 'dark' : 'light')}
+              className="flex items-center gap-2 px-4 py-2 text-xs tracking-editorial uppercase text-[#b5afa6] border border-white/10 hover:border-[#b87333]/50 hover:text-[#e8e2d6] transition-all"
+            >
+              {isLight ? <IconMoon size={14} /> : <IconSun size={14} />}
+              {isLight ? 'Тёмная' : 'Светлая'}
             </button>
           </div>
         </div>
       </div>
 
       {/* Phone Preview */}
-      <div className="pt-24 pb-20 flex justify-center items-start">
+      <div className="flex justify-center pb-12">
         <div className="flex flex-col items-center">
-          {/* Variant Label */}
-          <div className={`mb-4 text-center ${themeMode === 'light' ? 'text-gray-600' : 'text-gray-300'}`}>
-            <span className="text-sm font-medium">
-              {designVariant === 'minimal' ? '🖥️ Вариант 1: Минимализм' : '🎨 Вариант 2: Эмоциональный'}
+          {/* Screen label */}
+          <div className="mb-5 flex items-center gap-3">
+            <div className="h-px w-8 bg-[#b87333]/40" />
+            <span className="text-[10px] tracking-editorial uppercase text-[#b87333]">
+              {screenLabel[currentScreen]}
             </span>
-            <span className="text-xs block mt-0.5 opacity-60">
-              {themeMode === 'light' ? '☀️ Светлая тема' : '🌙 Тёмная тема'}
-            </span>
+            <div className="h-px w-8 bg-[#b87333]/40" />
           </div>
-          <div className={`phone-frame ${themeClasses} relative`}>
-          <div className="phone-notch" />
-          
-          {/* Status Bar */}
-          <div className="absolute top-0 left-0 right-0 z-40 flex items-center justify-between px-8 pt-3 pb-1">
-            <span className={`text-xs font-medium ${themeMode === 'light' ? 'text-black' : 'text-white'}`}>9:41</span>
-            <div className="flex items-center gap-1">
-              <div className={`w-4 h-2.5 rounded-sm border ${themeMode === 'light' ? 'border-black' : 'border-white'}`}>
-                <div className={`w-2.5 h-full rounded-sm ${themeMode === 'light' ? 'bg-black' : 'bg-white'}`} />
+
+          <div className="phone-frame relative">
+            <div className="phone-notch" />
+
+            {/* Status Bar */}
+            <div className="absolute top-0 left-0 right-0 z-40 flex items-center justify-between px-8 pt-3.5 pb-1">
+              <span className={`text-[11px] font-medium tabular-nums ${isLight ? 'text-[#1c1c1c]' : 'text-[#e8e2d6]'}`}>
+                9:41
+              </span>
+              <div className="flex items-center gap-1.5">
+                <div className={`w-[18px] h-[9px] rounded-[2px] border ${isLight ? 'border-[#1c1c1c]' : 'border-[#e8e2d6]'}`}>
+                  <div className={`w-[12px] h-full rounded-[1px] ${isLight ? 'bg-[#1c1c1c]' : 'bg-[#e8e2d6]'}`} />
+                </div>
               </div>
+            </div>
+
+            {/* Screen Content */}
+            <div className="h-full w-full overflow-hidden relative">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentScreen + themeMode}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="h-full w-full"
+                >
+                  {renderScreen()}
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Home Indicator */}
+              <div className={`absolute bottom-2 left-1/2 -translate-x-1/2 w-[120px] h-[4px] rounded-full ${
+                isLight ? 'bg-[#1c1c1c]/20' : 'bg-[#e8e2d6]/20'
+              } z-50`} />
             </div>
           </div>
 
-          {/* Screen Content */}
-          <div className="h-full w-full overflow-hidden relative">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentScreen + designVariant + themeMode}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="h-full w-full"
-              >
-                {renderScreen()}
-              </motion.div>
-            </AnimatePresence>
-            
-            {/* Home Indicator */}
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 rounded-full bg-gray-500/30 z-50" />
+          {/* Caption under phone */}
+          <div className="mt-8 text-center max-w-[390px]">
+            <p className="text-[10px] tracking-editorial uppercase text-[#8a8580]">
+              {currentScreen === 'map' && 'Навигация по всем экранам приложения'}
+              {currentScreen === 'onboarding' && 'Знакомство с ценностью приложения'}
+              {currentScreen === 'home' && 'Цитата дня, список, фильтры · переключайте состояния ниже'}
+              {currentScreen === 'add' && 'Форма сохранения новой цитаты'}
+              {currentScreen === 'card' && 'Полный просмотр · действия · удаление'}
+              {currentScreen === 'search' && 'Поиск по тексту, автору, тегам'}
+              {currentScreen === 'settings' && 'Тема, напоминания, экспорт данных'}
+            </p>
           </div>
-        </div>
-        
-        {/* Screen info */}
-        <div className={`mt-6 text-center max-w-[390px] ${themeMode === 'light' ? 'text-gray-500' : 'text-gray-400'}`}>
-          <p className="text-xs">
-            {currentScreen === 'map' && '📱 Карта экранов — навигация по всем экранам приложения'}
-            {currentScreen === 'onboarding' && '👋 Онбординг — знакомство с приложением'}
-            {currentScreen === 'home' && '🏠 Главная — цитата дня, фильтры и список цитат'}
-            {currentScreen === 'add' && '✍️ Добавление — форма для новой цитаты'}
-            {currentScreen === 'card' && '💬 Карточка — полный просмотр цитаты и действия'}
-            {currentScreen === 'search' && '🔍 Поиск — нахождение цитат по тексту, тегам'}
-            {currentScreen === 'settings' && '⚙️ Настройки — тема, напоминания, экспорт'}
-          </p>
-        </div>
         </div>
       </div>
 
-      {/* Bottom Navigation (for non-map screens) */}
+      {/* Bottom Navigation */}
       {currentScreen !== 'map' && currentScreen !== 'onboarding' && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
-          <div className="flex items-center gap-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-full px-4 py-2 shadow-lg border border-gray-200 dark:border-gray-700">
-            <NavButton icon={<Home size={16} />} label="Главная" active={currentScreen === 'home'} onClick={() => navigate('home')} />
-            <NavButton icon={<Search size={16} />} label="Поиск" active={currentScreen === 'search'} onClick={() => navigate('search')} />
-            <NavButton icon={<PlusCircle size={16} />} label="Добавить" active={currentScreen === 'add'} onClick={() => navigate('add')} />
-            <NavButton icon={<Settings size={16} />} label="Настройки" active={currentScreen === 'settings'} onClick={() => navigate('settings')} />
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+          <div className={`flex items-center border ${isLight ? 'bg-[#f5f0e8]/95 border-[#d4cdc2] text-[#1c1c1c]' : 'bg-[#1e1c18]/95 border-[#2e2b25] text-[#e8e2d6]'} backdrop-blur-xl rounded-full px-2 py-2 shadow-2xl`}>
+            <NavBtn icon={<IconHome size={16} />} label="Главная" active={currentScreen === 'home'} onClick={() => navigate('home')} theme={themeMode} />
+            <NavBtn icon={<IconSearch size={16} />} label="Поиск" active={currentScreen === 'search'} onClick={() => navigate('search')} theme={themeMode} />
+            <NavBtn icon={<IconPlus size={16} />} label="Новая" active={currentScreen === 'add'} onClick={() => navigate('add')} theme={themeMode} />
+            <NavBtn icon={<IconSettings size={16} />} label="Настройки" active={currentScreen === 'settings'} onClick={() => navigate('settings')} theme={themeMode} />
           </div>
         </div>
       )}
 
-      {/* Design Concept Info */}
-      <div className={`max-w-3xl mx-auto px-6 pb-12 ${themeMode === 'light' ? 'text-gray-600' : 'text-gray-400'}`}>
-        <div className={`p-6 rounded-2xl ${themeMode === 'light' ? 'bg-white border border-gray-200' : 'bg-gray-800 border border-gray-700'}`}>
-          <h3 className={`text-lg font-semibold mb-3 ${themeMode === 'light' ? 'text-gray-800' : 'text-white'}`}>
-            📖 Дизайн-концепция «Любимые цитаты»
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div>
-              <h4 className={`font-medium mb-1 ${themeMode === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>Платформа</h4>
-              <p>Telegram Mini App, mobile-first, 390px (iPhone)</p>
-            </div>
-            <div>
-              <h4 className={`font-medium mb-1 ${themeMode === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>Стиль</h4>
-              <p>Спокойный, тёплый, минималистичный</p>
-            </div>
-            <div>
-              <h4 className={`font-medium mb-1 ${themeMode === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>Цвета</h4>
-              <p>Глубокий синий (#1a2744) + тёплый янтарный (#e8a838)</p>
-            </div>
-            <div>
-              <h4 className={`font-medium mb-1 ${themeMode === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>Типографика</h4>
-              <p>Inter (UI) + Playfair Display (акценты)</p>
-            </div>
+      {/* Editorial Footer */}
+      <div className="max-w-5xl mx-auto pt-8 border-t border-white/10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-xs">
+          <div>
+            <div className="text-[10px] tracking-editorial uppercase text-[#b87333] mb-2">Платформа</div>
+            <p className="text-[#b5afa6] leading-relaxed">Telegram Mini App · iPhone 390px · Mobile-first</p>
           </div>
-          <div className={`mt-4 pt-4 border-t ${themeMode === 'light' ? 'border-gray-200' : 'border-gray-700'}`}>
-            <h4 className={`font-medium mb-2 ${themeMode === 'light' ? 'text-gray-700' : 'text-gray-300'}`}>
-              🎯 Два варианта дизайна:
-            </h4>
-            <div className="flex gap-4 text-xs">
-              <div className={`flex-1 p-3 rounded-lg ${themeMode === 'light' ? 'bg-gray-50' : 'bg-gray-700/50'}`}>
-                <strong>1. Минимализм</strong> — чистые линии, нейтральные цвета, акцент на функциональность
-              </div>
-              <div className={`flex-1 p-3 rounded-lg ${themeMode === 'light' ? 'bg-gray-50' : 'bg-gray-700/50'}`}>
-                <strong>2. Эмоциональный</strong> — выразительная типографика (serif italic), мягкие градиенты, тёплые акценты
-              </div>
-            </div>
+          <div>
+            <div className="text-[10px] tracking-editorial uppercase text-[#b87333] mb-2">Палитра</div>
+            <p className="text-[#b5afa6] leading-relaxed">Бумажный фон · Чернильный текст · Янтарный акцент</p>
           </div>
+          <div>
+            <div className="text-[10px] tracking-editorial uppercase text-[#b87333] mb-2">Типографика</div>
+            <p className="text-[#b5afa6] leading-relaxed">Playfair Display · Inter · Крупные кавычки · Нумерация</p>
+          </div>
+          <div>
+            <div className="text-[10px] tracking-editorial uppercase text-[#b87333] mb-2">Принципы</div>
+            <p className="text-[#b5afa6] leading-relaxed">Воздух · Тонкие линии · Книжный премиум · Цитата — главный герой</p>
+          </div>
+        </div>
+        <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between text-[10px] tracking-editorial uppercase text-[#8a8580]">
+          <span>№ 01 · Дизайн-концепция</span>
+          <span>Минимализм · Редакционный стиль</span>
         </div>
       </div>
     </div>
   );
 }
 
-function NavButton({ icon, label, active, onClick }: { icon: React.ReactNode; label: string; active: boolean; onClick: () => void }) {
+function NavBtn({ icon, label, active, onClick, theme }: {
+  icon: React.ReactNode; label: string; active: boolean; onClick: () => void; theme: ThemeMode;
+}) {
+  const isLight = theme === 'light';
   return (
     <button
       onClick={onClick}
-      className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-full transition-all ${
-        active 
-          ? 'text-deep-blue dark:text-amber bg-blue-50 dark:bg-amber/10' 
-          : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+      className={`flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-full transition-all ${
+        active
+          ? isLight ? 'text-[#b87333]' : 'text-[#d4944a]'
+          : isLight ? 'text-[#8a8580] hover:text-[#1c1c1c]' : 'text-[#7a7368] hover:text-[#e8e2d6]'
       }`}
     >
       {icon}
-      <span className="text-[10px] font-medium">{label}</span>
+      <span className="text-[9px] tracking-editorial uppercase">{label}</span>
     </button>
   );
 }

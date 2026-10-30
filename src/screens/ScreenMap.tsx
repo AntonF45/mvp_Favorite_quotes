@@ -1,148 +1,107 @@
 import { motion } from 'framer-motion';
+import { IconArrowRight, IconMap } from '../components/Icons';
 
 type Screen = 'onboarding' | 'home' | 'add' | 'card' | 'search' | 'settings' | 'map';
-type DesignVariant = 'minimal' | 'emotional';
 type ThemeMode = 'light' | 'dark';
 
 interface Props {
-  variant: DesignVariant;
   theme: ThemeMode;
   onNavigate: (screen: Screen) => void;
 }
 
 const screens = [
-  { id: 'onboarding' as Screen, name: 'Онбординг', emoji: '👋', desc: 'Приветствие и объяснение ценности', x: 50, y: 8 },
-  { id: 'home' as Screen, name: 'Главная', emoji: '🏠', desc: 'Цитата дня, список, фильтры', x: 50, y: 25 },
-  { id: 'add' as Screen, name: 'Добавить цитату', emoji: '✍️', desc: 'Текст, автор, источник, теги', x: 20, y: 42 },
-  { id: 'card' as Screen, name: 'Карточка цитаты', emoji: '💬', desc: 'Полный текст, действия', x: 50, y: 42 },
-  { id: 'search' as Screen, name: 'Поиск и фильтры', emoji: '🔍', desc: 'Поиск, теги, дата, избранное', x: 80, y: 42 },
-  { id: 'settings' as Screen, name: 'Настройки', emoji: '⚙️', desc: 'Тема, напоминания, экспорт', x: 50, y: 60 },
-];
-
-const states = [
-  { name: 'Пустая коллекция', emoji: '📭', desc: 'Главный экран без цитат' },
-  { name: 'Пустой результат поиска', emoji: '🔎', desc: 'Ничего не найдено' },
-  { name: 'Загрузка списка', emoji: '⏳', desc: 'Скелетон-загрузка' },
-  { name: 'Ошибка сети', emoji: '❌', desc: 'Кнопка «Повторить»' },
-  { name: 'Подтверждение удаления', emoji: '⚠️', desc: 'Модальное окно' },
-  { name: 'Успешное сохранение', emoji: '✅', desc: 'Тост-уведомление' },
+  { id: 'onboarding' as Screen, num: '01', name: 'Онбординг', desc: 'Знакомство с ценностью приложения' },
+  { id: 'home' as Screen, num: '02', name: 'Главная', desc: 'Цитата дня, список, фильтры' },
+  { id: 'add' as Screen, num: '03', name: 'Добавить цитату', desc: 'Текст, автор, источник, теги' },
+  { id: 'card' as Screen, num: '04', name: 'Карточка цитаты', desc: 'Полный текст и действия' },
+  { id: 'search' as Screen, num: '05', name: 'Поиск и фильтры', desc: 'Поиск, теги, избранное' },
+  { id: 'settings' as Screen, num: '06', name: 'Настройки', desc: 'Тема, напоминания, экспорт' },
 ];
 
 const flows = [
-  {
-    title: 'Сохранение цитаты',
-    steps: ['Главная', 'Нажать «+»', 'Заполнить форму', 'Сохранить', 'Главная (новая цитата вверху)'],
-    emoji: '✍️'
-  },
-  {
-    title: 'Просмотр цитаты',
-    steps: ['Главная', 'Нажать на цитату', 'Карточка', 'Действия', 'Назад на главную'],
-    emoji: '👁️'
-  },
-  {
-    title: 'Поиск цитаты',
-    steps: ['Главная', 'Поиск', 'Ввести запрос', 'Результаты', 'Выбрать цитату'],
-    emoji: '🔍'
-  },
-  {
-    title: 'Первый запуск',
-    steps: ['Онбординг', 'Начать', 'Главная (пустая)', 'Добавить первую цитату'],
-    emoji: '🚀'
-  },
+  { num: 'i.', title: 'Сохранение цитаты', steps: ['Главная', 'Новая', 'Форма', 'Сохранить', 'Главная'] },
+  { num: 'ii.', title: 'Просмотр цитаты', steps: ['Главная', 'Карточка', 'Действия', 'Назад'] },
+  { num: 'iii.', title: 'Поиск', steps: ['Главная', 'Поиск', 'Запрос', 'Результат'] },
+  { num: 'iv.', title: 'Первый запуск', steps: ['Онбординг', 'Начать', 'Главная', 'Добавить'] },
 ];
 
-export default function ScreenMap({ variant, theme, onNavigate }: Props) {
+const states = [
+  { num: 'a.', name: 'Пустая коллекция', desc: 'Главный экран без цитат' },
+  { num: 'b.', name: 'Пустой результат поиска', desc: 'Ничего не найдено' },
+  { num: 'c.', name: 'Загрузка списка', desc: 'Скелетон-загрузка' },
+  { num: 'd.', name: 'Ошибка сети', desc: 'Кнопка «Повторить»' },
+  { num: 'e.', name: 'Подтверждение удаления', desc: 'Модальное окно' },
+  { num: 'f.', name: 'Успешное сохранение', desc: 'Экран подтверждения' },
+];
+
+export default function ScreenMap({ theme, onNavigate }: Props) {
   const isLight = theme === 'light';
-  const isEmotional = variant === 'emotional';
+  const paper = isLight ? 'bg-[#f5f0e8]' : 'bg-[#171512]';
+  const ink = isLight ? 'text-[#1c1c1c]' : 'text-[#e8e2d6]';
+  const muted = isLight ? 'text-[#8a8580]' : 'text-[#7a7368]';
+  const rule = isLight ? 'bg-[#d4cdc2]' : 'bg-[#2e2b25]';
+  const ruleBorder = isLight ? 'border-[#d4cdc2]' : 'border-[#2e2b25]';
+  const accent = isLight ? 'text-[#b87333]' : 'text-[#d4944a]';
 
   return (
-    <div className={`h-full w-full overflow-y-auto scrollbar-hide ${isLight ? 'bg-warm-bg' : 'bg-dark-bg'} pt-10`}>
-      <div className="px-5 pt-4 pb-8">
+    <div className={`h-full w-full overflow-y-auto scrollbar-hide ${paper} ${ink} pt-10`}>
+      <div className="px-7 pt-5 pb-10">
         {/* Header */}
-        <div className="mb-6">
-          <h1 className={`text-2xl font-bold ${isLight ? 'text-deep-blue' : 'text-amber'} ${isEmotional ? 'font-serif italic' : ''}`}>
-            Карта экранов
+        <div className="mb-10">
+          <div className={`text-[10px] tracking-editorial uppercase ${muted} mb-2`}>№ 00 · Навигация</div>
+          <h1 className="font-editorial text-[32px] leading-[1.05] tracking-tight">
+            Карта<br /><span className={accent}>экранов</span>
           </h1>
-          <p className={`text-sm mt-1 ${isLight ? 'text-warm-muted' : 'text-dark-muted'}`}>
-            Структура приложения «Любимые цитаты»
-          </p>
+          <div className={`h-px ${rule} mt-5`} />
         </div>
 
-        {/* Screen Flow */}
-        <div className="mb-8">
-          <h2 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${isLight ? 'text-warm-muted' : 'text-dark-muted'}`}>
-            Навигация
-          </h2>
-          <div className="relative">
-            {screens.map((screen, i) => (
-              <motion.div
-                key={screen.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.08 }}
-                className="mb-2"
-              >
-                <button
-                  onClick={() => onNavigate(screen.id)}
-                  className={`w-full text-left p-3 rounded-xl transition-all ${
-                    isLight 
-                      ? 'bg-white border border-warm-border hover:border-deep-blue/30 hover:shadow-sm' 
-                      : 'bg-dark-card border border-dark-border hover:border-amber/30 hover:shadow-sm'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-xl">{screen.emoji}</span>
-                    <div className="flex-1">
-                      <div className={`text-sm font-medium ${isLight ? 'text-warm-text' : 'text-dark-text'}`}>
-                        {screen.name}
-                      </div>
-                      <div className={`text-xs ${isLight ? 'text-warm-muted' : 'text-dark-muted'}`}>
-                        {screen.desc}
-                      </div>
-                    </div>
-                    <div className={`text-xs px-2 py-0.5 rounded-full ${
-                      isLight ? 'bg-gray-100 text-gray-500' : 'bg-gray-700 text-gray-400'
-                    }`}>
-                      →
-                    </div>
-                  </div>
-                </button>
-              </motion.div>
-            ))}
-          </div>
+        {/* Screens */}
+        <div className="mb-10">
+          <div className={`text-[10px] tracking-editorial uppercase ${accent} mb-5`}>— Экраны —</div>
+          {screens.map((screen, i) => (
+            <motion.button
+              key={screen.id}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.06 }}
+              onClick={() => onNavigate(screen.id)}
+              className={`w-full text-left py-4 border-b ${ruleBorder} group flex items-center gap-5`}
+            >
+              <span className={`font-editorial text-[13px] ${accent} tabular-nums w-7`}>
+                {screen.num}
+              </span>
+              <div className="flex-1 min-w-0">
+                <div className={`text-[15px] font-editorial tracking-tight ${ink} group-hover:opacity-70 transition-opacity`}>
+                  {screen.name}
+                </div>
+                <div className={`text-[11px] ${muted} mt-0.5`}>{screen.desc}</div>
+              </div>
+              <IconArrowRight size={14} className={`${muted} group-hover:translate-x-1 transition-transform`} />
+            </motion.button>
+          ))}
         </div>
 
         {/* User Flows */}
-        <div className="mb-8">
-          <h2 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${isLight ? 'text-warm-muted' : 'text-dark-muted'}`}>
-            Пользовательские сценарии
-          </h2>
+        <div className="mb-10">
+          <div className={`text-[10px] tracking-editorial uppercase ${accent} mb-5`}>— Сценарии —</div>
           {flows.map((flow, i) => (
             <motion.div
               key={flow.title}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + i * 0.1 }}
-              className={`mb-3 p-3 rounded-xl ${
-                isLight ? 'bg-white border border-warm-border' : 'bg-dark-card border border-dark-border'
-              }`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 + i * 0.08 }}
+              className={`py-4 border-b ${ruleBorder}`}
             >
-              <div className="flex items-center gap-2 mb-2">
-                <span>{flow.emoji}</span>
-                <span className={`text-sm font-medium ${isLight ? 'text-warm-text' : 'text-dark-text'}`}>
-                  {flow.title}
-                </span>
+              <div className="flex items-baseline gap-3 mb-3">
+                <span className={`font-editorial italic text-[12px] ${accent}`}>{flow.num}</span>
+                <span className={`text-[13px] ${ink}`}>{flow.title}</span>
               </div>
-              <div className="flex items-center gap-1 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap pl-7">
                 {flow.steps.map((step, j) => (
-                  <span key={j} className="flex items-center gap-1">
-                    <span className={`text-xs px-2 py-0.5 rounded-md ${
-                      isLight ? 'bg-blue-50 text-deep-blue' : 'bg-amber/10 text-amber'
-                    }`}>
-                      {step}
-                    </span>
+                  <span key={j} className="flex items-center gap-2">
+                    <span className={`text-[11px] tracking-wide ${ink}`}>{step}</span>
                     {j < flow.steps.length - 1 && (
-                      <span className={`text-xs ${isLight ? 'text-warm-muted' : 'text-dark-muted'}`}>→</span>
+                      <span className={`${muted}`}>·</span>
                     )}
                   </span>
                 ))}
@@ -152,48 +111,55 @@ export default function ScreenMap({ variant, theme, onNavigate }: Props) {
         </div>
 
         {/* States */}
-        <div className="mb-8">
-          <h2 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${isLight ? 'text-warm-muted' : 'text-dark-muted'}`}>
-            Состояния
-          </h2>
-          <div className="grid grid-cols-2 gap-2">
-            {states.map((state, i) => (
+        <div className="mb-10">
+          <div className={`text-[10px] tracking-editorial uppercase ${accent} mb-5`}>— Состояния —</div>
+          {states.map((state, i) => (
+            <motion.div
+              key={state.name}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 + i * 0.05 }}
+              className={`py-3 border-b ${ruleBorder} flex items-baseline gap-4`}
+            >
+              <span className={`font-editorial italic text-[12px] ${accent} w-5`}>{state.num}</span>
+              <div className="flex-1">
+                <div className={`text-[13px] ${ink}`}>{state.name}</div>
+                <div className={`text-[11px] ${muted} mt-0.5`}>{state.desc}</div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Design principles */}
+        <div className={`pt-6 border-t ${ruleBorder}`}>
+          <div className={`text-[10px] tracking-editorial uppercase ${accent} mb-4`}>— Принципы —</div>
+          <div className="space-y-3">
+            {[
+              'Мобильный first · 390px · iPhone',
+              'Нативный вид Telegram Mini App',
+              'Бумажный фон · чернильный текст · один тёплый акцент',
+              'Крупная типографика · большие кавычки · нумерация',
+              'Тонкие линии · 1.5px · без заливки',
+              'Много воздуха · цитата — главный герой',
+            ].map((p, i) => (
               <motion.div
-                key={state.name}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 + i * 0.05 }}
-                className={`p-3 rounded-xl text-center ${
-                  isLight ? 'bg-white border border-warm-border' : 'bg-dark-card border border-dark-border'
-                }`}
+                key={i}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7 + i * 0.05 }}
+                className="flex items-baseline gap-3"
               >
-                <span className="text-2xl block mb-1">{state.emoji}</span>
-                <span className={`text-xs font-medium block ${isLight ? 'text-warm-text' : 'text-dark-text'}`}>
-                  {state.name}
+                <span className={`font-editorial italic text-[11px] ${accent}`}>
+                  {String(i + 1).padStart(2, '0')}.
                 </span>
-                <span className={`text-[10px] block mt-0.5 ${isLight ? 'text-warm-muted' : 'text-dark-muted'}`}>
-                  {state.desc}
-                </span>
+                <span className={`text-[12px] leading-relaxed ${ink}`}>{p}</span>
               </motion.div>
             ))}
           </div>
         </div>
 
-        {/* Design Principles */}
-        <div className={`p-4 rounded-xl ${
-          isLight ? 'bg-gradient-to-br from-blue-50 to-amber-50 border border-blue-100' : 'bg-gradient-to-br from-deep-blue/20 to-amber/10 border border-amber/20'
-        }`}>
-          <h3 className={`text-sm font-semibold mb-2 ${isLight ? 'text-deep-blue' : 'text-amber'}`}>
-            🎨 Принципы дизайна
-          </h3>
-          <ul className={`text-xs space-y-1.5 ${isLight ? 'text-warm-text' : 'text-dark-text'}`}>
-            <li>• Мобильный first, ширина 390px (iPhone)</li>
-            <li>• Нативный вид Telegram Mini App</li>
-            <li>• Спокойный, тёплый, минималистичный</li>
-            <li>• Читаемая типографика с акцентом на текст цитат</li>
-            <li>• Поддержка светлой и тёмной темы</li>
-            <li>• Глубокий синий + тёплый янтарный</li>
-          </ul>
+        <div className={`text-center mt-10 text-[10px] tracking-editorial uppercase ${muted}`}>
+          — конец карты —
         </div>
       </div>
     </div>

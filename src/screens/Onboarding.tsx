@@ -1,167 +1,117 @@
 import { motion } from 'framer-motion';
+import { IconArrowRight, IconQuote } from '../components/Icons';
 
-type DesignVariant = 'minimal' | 'emotional';
 type ThemeMode = 'light' | 'dark';
 
 interface Props {
-  variant: DesignVariant;
   theme: ThemeMode;
   onStart: () => void;
 }
 
-export default function Onboarding({ variant, theme, onStart }: Props) {
+export default function Onboarding({ theme, onStart }: Props) {
   const isLight = theme === 'light';
-  const isEmotional = variant === 'emotional';
+  const paper = isLight ? 'bg-[#f5f0e8]' : 'bg-[#171512]';
+  const ink = isLight ? 'text-[#1c1c1c]' : 'text-[#e8e2d6]';
+  const muted = isLight ? 'text-[#8a8580]' : 'text-[#7a7368]';
+  const rule = isLight ? 'bg-[#d4cdc2]' : 'bg-[#2e2b25]';
+  const accent = isLight ? 'text-[#b87333]' : 'text-[#d4944a]';
 
   return (
-    <div className={`h-full w-full flex flex-col ${isLight ? 'bg-warm-bg' : 'bg-dark-bg'} pt-12`}>
-      {/* Minimal Variant */}
-      {!isEmotional ? (
-        <div className="flex-1 flex flex-col items-center justify-center px-8">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
-          >
-            {/* Icon */}
-            <div className={`w-20 h-20 rounded-2xl mx-auto mb-8 flex items-center justify-center ${
-              isLight ? 'bg-deep-blue/5' : 'bg-amber/10'
-            }`}>
-              <span className="text-4xl">📖</span>
-            </div>
+    <div className={`h-full w-full flex flex-col ${paper} ${ink} pt-12`}>
+      {/* Top editorial marker */}
+      <div className="px-8 pt-6 flex items-center justify-between">
+        <span className={`text-[10px] tracking-editorial uppercase ${muted}`}>№ 01</span>
+        <span className={`text-[10px] tracking-editorial uppercase ${muted}`}>Введение</span>
+      </div>
 
-            {/* Title */}
-            <h1 className={`text-2xl font-semibold mb-3 ${isLight ? 'text-deep-blue' : 'text-amber'}`}>
-              Любимые цитаты
-            </h1>
+      {/* Main content */}
+      <div className="flex-1 flex flex-col justify-center px-8">
+        {/* Giant decorative quote mark */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className={`font-editorial ${accent} opacity-40 leading-none mb-4`}
+          style={{ fontSize: '120px', lineHeight: 0.8 }}
+        >
+          «
+        </motion.div>
 
-            {/* Description */}
-            <p className={`text-sm leading-relaxed mb-8 max-w-[280px] mx-auto ${
-              isLight ? 'text-warm-muted' : 'text-dark-muted'
-            }`}>
-              Сохраняйте вдохновляющие мысли из книг, фильмов и разговоров. 
-              Ваш личный дневник цитат — всегда под рукой.
-            </p>
+        {/* Title */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="font-editorial text-[40px] leading-[1.05] tracking-tight mb-6"
+        >
+          Любимые<br />
+          <span className={accent}>цитаты</span>
+        </motion.h1>
 
-            {/* Features */}
-            <div className="space-y-3 mb-10 text-left max-w-[260px] mx-auto">
-              {[
-                { emoji: '✍️', text: 'Быстрое сохранение' },
-                { emoji: '🏷️', text: 'Теги и поиск' },
-                { emoji: '📤', text: 'Делитесь в Telegram' },
-              ].map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 + i * 0.1 }}
-                  className={`flex items-center gap-3 p-2.5 rounded-lg ${
-                    isLight ? 'bg-white/60' : 'bg-dark-card/60'
-                  }`}
-                >
-                  <span className="text-lg">{item.emoji}</span>
-                  <span className={`text-sm ${isLight ? 'text-warm-text' : 'text-dark-text'}`}>{item.text}</span>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+        {/* Hairline */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className={`h-px ${rule} origin-left mb-6`}
+        />
 
-          {/* CTA Button */}
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            onClick={onStart}
-            className={`w-full max-w-[280px] py-4 rounded-2xl text-base font-semibold transition-all active:scale-95 ${
-              isLight 
-                ? 'bg-deep-blue text-white hover:bg-deep-blue-light' 
-                : 'bg-amber text-dark-bg hover:bg-amber-light'
-            }`}
-          >
-            Начать
-          </motion.button>
-        </div>
-      ) : (
-        /* Emotional Variant */
-        <div className="flex-1 flex flex-col items-center justify-center px-8 relative">
-          {/* Decorative elements */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.15 }}
-            className="absolute top-20 left-8 text-6xl"
-          >
-            ✨
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.1 }}
-            className="absolute bottom-40 right-8 text-5xl"
-          >
-            💫
-          </motion.div>
+        {/* Description */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className={`text-[15px] leading-[1.6] ${muted} max-w-[300px] mb-10`}
+        >
+          Тихое место для мыслей, которые стоит сохранить.
+          Из книг, фильмов, разговоров и дней, которые вы не хотите забыть.
+        </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
-          >
-            {/* Decorative quote marks */}
-            <div className={`text-7xl mb-4 ${isLight ? 'text-amber/30' : 'text-amber/20'}`} style={{ fontFamily: 'Playfair Display, serif' }}>
-              «»
-            </div>
-
-            {/* Title */}
-            <motion.h1 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className={`text-3xl font-bold mb-4 ${isLight ? 'text-deep-blue' : 'text-amber'} italic`}
-              style={{ fontFamily: 'Playfair Display, serif' }}
+        {/* Feature list — numbered */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="space-y-4 mb-12"
+        >
+          {[
+            { n: 'i.', text: 'Сохраняйте цитаты одним касанием' },
+            { n: 'ii.', text: 'Находите по тегам, автору, источнику' },
+            { n: 'iii.', text: 'Делитесь в Telegram' },
+          ].map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.6 + i * 0.1 }}
+              className="flex items-baseline gap-4"
             >
-              Любимые<br />цитаты
-            </motion.h1>
+              <span className={`text-[11px] tracking-editorial ${accent} font-editorial italic w-6`}>
+                {item.n}
+              </span>
+              <span className={`text-[13px] ${ink}`}>{item.text}</span>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
 
-            {/* Description */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className={`text-sm leading-relaxed mb-10 max-w-[280px] mx-auto ${
-                isLight ? 'text-warm-muted' : 'text-dark-muted'
-              }`}
-            >
-              Каждая цитата — это момент, который тронул вас. 
-              Собирайте их, перечитывайте, делитесь.
-            </motion.p>
-          </motion.div>
-
-          {/* CTA Button */}
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            onClick={onStart}
-            className={`w-full max-w-[280px] py-4 rounded-2xl text-base font-semibold transition-all active:scale-95 relative overflow-hidden ${
-              isLight 
-                ? 'bg-gradient-to-r from-deep-blue to-deep-blue-light text-white' 
-                : 'bg-gradient-to-r from-amber to-amber-light text-dark-bg'
-            }`}
-          >
-            <span className="relative z-10">Начать собирать</span>
-          </motion.button>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className={`text-xs mt-4 ${isLight ? 'text-warm-muted' : 'text-dark-muted'}`}
-          >
-            Бесплатно • Без рекламы • Приватно
-          </motion.p>
-        </div>
-      )}
+      {/* CTA */}
+      <div className="px-8 pb-10">
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9 }}
+          onClick={onStart}
+          className={`w-full py-5 flex items-center justify-between px-6 border transition-all active:scale-[0.98] ${
+            isLight
+              ? 'bg-[#1c1c1c] text-[#f5f0e8] border-[#1c1c1c] hover:bg-[#3d3d3d]'
+              : 'bg-[#e8e2d6] text-[#171512] border-[#e8e2d6] hover:bg-[#d4cdc2]'
+          }`}
+        >
+          <span className="text-[11px] tracking-editorial uppercase font-medium">Начать</span>
+          <IconArrowRight size={16} />
+        </motion.button>
+      </div>
     </div>
   );
 }
