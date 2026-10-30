@@ -1,2 +1,2 @@
-# mvp_Favorite_quotes
+# Цытаты.
 Дизайн Telegram Mini App
