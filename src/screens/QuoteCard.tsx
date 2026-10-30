@@ -57,20 +57,12 @@ export default function QuoteCard({ theme, onBack }: Props) {
       {/* Quote Content — hero */}
       <div className="flex-1 overflow-y-auto scrollbar-hide px-7 py-8">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          {/* Opening quote mark */}
-          <div className={`font-editorial ${accent} opacity-40 leading-none mb-2`} style={{ fontSize: '90px', lineHeight: 0.7 }}>
-            «
-          </div>
-
-          {/* Quote text — the hero */}
-          <p className="font-editorial text-[26px] leading-[1.25] tracking-tight mb-6">
+          {/* Quote text — the hero with inline quotes */}
+          <p className="font-editorial text-[24px] leading-[1.35] tracking-tight mb-6">
+            <span className={`${accent} text-[28px] mr-1`}>"</span>
             {quote.text}
+            <span className={`${accent} text-[28px] ml-1`}>"</span>
           </p>
-
-          {/* Closing quote mark */}
-          <div className={`font-editorial ${accent} opacity-40 leading-none text-right mb-8`} style={{ fontSize: '90px', lineHeight: 0.7 }}>
-            »
-          </div>
 
           {/* Hairline */}
           <div className={`h-px ${rule} mb-6`} />
@@ -94,7 +86,7 @@ export default function QuoteCard({ theme, onBack }: Props) {
             <div className="flex flex-wrap gap-x-5 gap-y-1">
               {quote.tags.map((tag, i) => (
                 <span key={tag} className={`text-[12px] tracking-wide ${ink}`}>
-                  <span className={`font-editorial italic ${accent} mr-1`}>{String(i + 1).padStart(2, '0')}.</span>
+                  <span className={`${accent} mr-1 font-medium`}>{String(i + 1).padStart(2, '0')}.</span>
                   {tag}
                 </span>
               ))}
@@ -144,7 +136,7 @@ export default function QuoteCard({ theme, onBack }: Props) {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className={`relative w-full p-8 ${paper}`}
+              className={`relative w-full p-8 rounded-t-3xl ${paper}`}
             >
               <div className="flex items-center justify-between mb-6">
                 <span className={`text-[10px] tracking-editorial uppercase ${accent}`}>— Подтверждение —</span>
@@ -161,13 +153,13 @@ export default function QuoteCard({ theme, onBack }: Props) {
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowDelete(false)}
-                  className={`flex-1 py-4 border text-[11px] tracking-editorial uppercase ${ruleBorder} ${ink}`}
+                  className={`flex-1 py-4 rounded-xl border text-[11px] tracking-editorial uppercase ${ruleBorder} ${ink}`}
                 >
                   Отмена
                 </button>
                 <button
                   onClick={() => { setShowDelete(false); onBack(); }}
-                  className="flex-1 py-4 bg-[#1c1c1c] text-[#f5f0e8] text-[11px] tracking-editorial uppercase"
+                  className="flex-1 py-4 rounded-xl bg-[#1c1c1c] text-[#f5f0e8] text-[11px] tracking-editorial uppercase"
                 >
                   Удалить
                 </button>

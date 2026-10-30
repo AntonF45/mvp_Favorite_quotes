@@ -92,20 +92,16 @@ export default function HomeScreen({ theme, onNavigate }: Props) {
                 <div className={`text-[10px] tracking-editorial uppercase ${accent} mb-4`}>
                   — Цитата дня —
                 </div>
-                <div className="relative">
-                  <span className={`font-editorial ${accent} opacity-30 absolute -top-4 -left-2`} style={{ fontSize: '80px', lineHeight: 1 }}>
-                    «
-                  </span>
-                  <p className="font-editorial text-[22px] leading-[1.25] tracking-tight pl-2 pr-2 pb-3">
+                <div className={`p-6 rounded-2xl ${isLight ? 'bg-[#ede7db]' : 'bg-[#1e1c18]'}`}>
+                  <p className="font-editorial text-[20px] leading-[1.35] tracking-tight">
+                    <span className={`${accent} text-[24px] mr-1`}>"</span>
                     {quoteOfDay.text}
+                    <span className={`${accent} text-[24px] ml-1`}>"</span>
                   </p>
-                  <span className={`font-editorial ${accent} opacity-30 absolute -bottom-6 right-0`} style={{ fontSize: '80px', lineHeight: 1, transform: 'rotate(180deg)' }}>
-                    «
-                  </span>
-                </div>
-                <div className={`mt-6 pt-4 border-t ${rule}`}>
-                  <div className={`text-[12px] ${ink}`}>— {quoteOfDay.author}</div>
-                  <div className={`text-[10px] tracking-editorial uppercase ${muted} mt-0.5`}>{quoteOfDay.source}</div>
+                  <div className={`mt-4 pt-3 border-t ${rule}`}>
+                    <div className={`text-[12px] ${ink}`}>— {quoteOfDay.author}</div>
+                    <div className={`text-[10px] tracking-editorial uppercase ${muted} mt-0.5`}>{quoteOfDay.source}</div>
+                  </div>
                 </div>
               </div>
 
@@ -128,11 +124,11 @@ export default function HomeScreen({ theme, onNavigate }: Props) {
                     className={`w-full text-left py-5 border-b ${rule} group transition-colors`}
                   >
                     <div className="flex gap-5">
-                      <span className={`font-editorial text-[13px] ${muted} pt-1 w-6 tabular-nums`}>
+                      <span className={`text-[13px] ${muted} pt-1 w-6 tabular-nums font-medium`}>
                         {String(i + 1).padStart(2, '0')}
                       </span>
                       <div className="flex-1 min-w-0">
-                        <p className="font-editorial text-[15px] leading-[1.35] tracking-tight line-clamp-2 group-hover:opacity-70 transition-opacity">
+                        <p className="font-editorial text-[15px] leading-[1.4] tracking-tight line-clamp-2 group-hover:opacity-70 transition-opacity">
                           {q.text}
                         </p>
                         <div className="flex items-center gap-3 mt-2.5">
@@ -160,8 +156,7 @@ export default function HomeScreen({ theme, onNavigate }: Props) {
       <motion.button
         whileTap={{ scale: 0.92 }}
         onClick={() => onNavigate('add')}
-        className={`absolute bottom-8 right-7 w-12 h-12 flex items-center justify-center transition-all ${accentBg} ${isLight ? 'text-[#f5f0e8]' : 'text-[#171512]'}`}
-        style={{ borderRadius: '50%' }}
+        className={`absolute bottom-8 right-7 w-12 h-12 flex items-center justify-center transition-all rounded-full border-2 ${accent} ${isLight ? 'border-[#b87333] text-[#b87333] bg-[#f5f0e8]/80' : 'border-[#d4944a] text-[#d4944a] bg-[#171512]/80'} backdrop-blur-sm`}
       >
         <IconPlus size={20} />
       </motion.button>
@@ -173,20 +168,20 @@ function LoadingState({ isLight, rule, muted }: any) {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="px-7 pt-4 space-y-6">
       {/* Skeleton hero */}
-      <div>
-        <div className={`h-2 w-24 rounded-sm mb-5 ${isLight ? 'bg-[#e5ddd0]' : 'bg-[#2e2b25]'}`} />
-        <div className={`h-6 w-full rounded-sm mb-2 ${isLight ? 'bg-[#e5ddd0]' : 'bg-[#2e2b25]'}`} />
-        <div className={`h-6 w-3/4 rounded-sm mb-2 ${isLight ? 'bg-[#e5ddd0]' : 'bg-[#2e2b25]'}`} />
-        <div className={`h-3 w-32 rounded-sm mt-5 ${isLight ? 'bg-[#e5ddd0]' : 'bg-[#2e2b25]'}`} />
+      <div className={`p-6 rounded-2xl ${isLight ? 'bg-[#ede7db]' : 'bg-[#1e1c18]'}`}>
+        <div className={`h-2 w-24 rounded-full mb-5 ${isLight ? 'bg-[#d4cdc2]' : 'bg-[#2e2b25]'}`} />
+        <div className={`h-6 w-full rounded-full mb-2 ${isLight ? 'bg-[#d4cdc2]' : 'bg-[#2e2b25]'}`} />
+        <div className={`h-6 w-3/4 rounded-full mb-2 ${isLight ? 'bg-[#d4cdc2]' : 'bg-[#2e2b25]'}`} />
+        <div className={`h-3 w-32 rounded-full mt-5 ${isLight ? 'bg-[#d4cdc2]' : 'bg-[#2e2b25]'}`} />
       </div>
       <div className={`h-px ${rule}`} />
       {[1, 2, 3].map((i) => (
         <div key={i} className="flex gap-5 py-5 border-b" style={{ borderColor: isLight ? '#d4cdc2' : '#2e2b25' }}>
-          <div className={`h-4 w-6 rounded-sm ${isLight ? 'bg-[#e5ddd0]' : 'bg-[#2e2b25]'}`} />
+          <div className={`h-4 w-6 rounded-full ${isLight ? 'bg-[#e5ddd0]' : 'bg-[#2e2b25]'}`} />
           <div className="flex-1 space-y-2">
-            <div className={`h-4 w-full rounded-sm ${isLight ? 'bg-[#e5ddd0]' : 'bg-[#2e2b25]'}`} />
-            <div className={`h-4 w-2/3 rounded-sm ${isLight ? 'bg-[#e5ddd0]' : 'bg-[#2e2b25]'}`} />
-            <div className={`h-2.5 w-20 rounded-sm mt-2 ${isLight ? 'bg-[#e5ddd0]' : 'bg-[#2e2b25]'}`} />
+            <div className={`h-4 w-full rounded-full ${isLight ? 'bg-[#e5ddd0]' : 'bg-[#2e2b25]'}`} />
+            <div className={`h-4 w-2/3 rounded-full ${isLight ? 'bg-[#e5ddd0]' : 'bg-[#2e2b25]'}`} />
+            <div className={`h-2.5 w-20 rounded-full mt-2 ${isLight ? 'bg-[#e5ddd0]' : 'bg-[#2e2b25]'}`} />
           </div>
         </div>
       ))}
@@ -197,7 +192,10 @@ function LoadingState({ isLight, rule, muted }: any) {
 function ErrorState({ isLight, muted, accent, onRetry }: any) {
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex flex-col items-center justify-center py-24 px-8 text-center">
-      <div className={`text-[10px] tracking-editorial uppercase ${muted} mb-6`}>— Ошибка —</div>
+      <div className={`w-16 h-16 rounded-full border-2 ${isLight ? 'border-[#d4cdc2]' : 'border-[#2e2b25]'} flex items-center justify-center mb-6`}>
+        <span className={`text-[24px] ${accent}`}>!</span>
+      </div>
+      <div className={`text-[10px] tracking-editorial uppercase ${muted} mb-3`}>— Ошибка —</div>
       <h3 className="font-editorial text-[24px] leading-tight mb-3">
         Не удалось<br />загрузить
       </h3>
@@ -206,7 +204,7 @@ function ErrorState({ isLight, muted, accent, onRetry }: any) {
       </p>
       <button
         onClick={onRetry}
-        className={`px-8 py-3.5 border text-[11px] tracking-editorial uppercase transition-all active:scale-95 ${
+        className={`px-8 py-3.5 rounded-xl border text-[11px] tracking-editorial uppercase transition-all active:scale-95 ${
           isLight ? 'border-[#1c1c1c] text-[#1c1c1c] hover:bg-[#1c1c1c] hover:text-[#f5f0e8]' : 'border-[#e8e2d6] text-[#e8e2d6] hover:bg-[#e8e2d6] hover:text-[#171512]'
         }`}
       >
@@ -219,8 +217,8 @@ function ErrorState({ isLight, muted, accent, onRetry }: any) {
 function EmptyState({ isLight, muted, accent, onAdd }: any) {
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex flex-col items-center justify-center py-24 px-8 text-center">
-      <div className={`font-editorial ${accent} opacity-30 mb-6`} style={{ fontSize: '100px', lineHeight: 0.8 }}>
-        «»
+      <div className={`w-20 h-20 rounded-full border-2 ${isLight ? 'border-[#d4cdc2]' : 'border-[#2e2b25]'} flex items-center justify-center mb-6`}>
+        <span className={`text-[32px] font-editorial ${accent}`}>?</span>
       </div>
       <h3 className="font-editorial text-[24px] leading-tight mb-3">
         Пока<br />тишина
@@ -230,7 +228,7 @@ function EmptyState({ isLight, muted, accent, onAdd }: any) {
       </p>
       <button
         onClick={onAdd}
-        className={`px-8 py-3.5 border text-[11px] tracking-editorial uppercase transition-all active:scale-95 ${
+        className={`px-8 py-3.5 rounded-xl border text-[11px] tracking-editorial uppercase transition-all active:scale-95 ${
           isLight ? 'border-[#1c1c1c] text-[#1c1c1c] hover:bg-[#1c1c1c] hover:text-[#f5f0e8]' : 'border-[#e8e2d6] text-[#e8e2d6] hover:bg-[#e8e2d6] hover:text-[#171512]'
         }`}
       >

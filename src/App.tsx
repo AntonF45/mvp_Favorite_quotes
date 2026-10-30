@@ -75,7 +75,7 @@ export default function App() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => navigate('map')}
-              className={`flex items-center gap-2 px-4 py-2 text-xs tracking-editorial uppercase transition-all border ${
+              className={`flex items-center gap-2 px-4 py-2 text-xs tracking-editorial uppercase transition-all border rounded-xl ${
                 currentScreen === 'map'
                   ? 'bg-[#b87333] text-[#1c1c1c] border-[#b87333]'
                   : 'bg-transparent text-[#b5afa6] border-white/10 hover:border-[#b87333]/50 hover:text-[#e8e2d6]'
@@ -86,7 +86,7 @@ export default function App() {
             </button>
             <button
               onClick={() => setThemeMode(isLight ? 'dark' : 'light')}
-              className="flex items-center gap-2 px-4 py-2 text-xs tracking-editorial uppercase text-[#b5afa6] border border-white/10 hover:border-[#b87333]/50 hover:text-[#e8e2d6] transition-all"
+              className="flex items-center gap-2 px-4 py-2 text-xs tracking-editorial uppercase text-[#b5afa6] border border-white/10 hover:border-[#b87333]/50 hover:text-[#e8e2d6] transition-all rounded-xl"
             >
               {isLight ? <IconMoon size={14} /> : <IconSun size={14} />}
               {isLight ? 'Тёмная' : 'Светлая'}
@@ -162,7 +162,7 @@ export default function App() {
       {/* Bottom Navigation */}
       {currentScreen !== 'map' && currentScreen !== 'onboarding' && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
-          <div className={`flex items-center border ${isLight ? 'bg-[#f5f0e8]/95 border-[#d4cdc2] text-[#1c1c1c]' : 'bg-[#1e1c18]/95 border-[#2e2b25] text-[#e8e2d6]'} backdrop-blur-xl rounded-full px-2 py-2 shadow-2xl`}>
+          <div className={`flex items-center border ${isLight ? 'bg-[#f5f0e8]/95 border-[#d4cdc2] text-[#1c1c1c]' : 'bg-[#1e1c18]/95 border-[#2e2b25] text-[#e8e2d6]'} backdrop-blur-xl rounded-2xl px-2 py-2 shadow-xl`}>
             <NavBtn icon={<IconHome size={16} />} label="Главная" active={currentScreen === 'home'} onClick={() => navigate('home')} theme={themeMode} />
             <NavBtn icon={<IconSearch size={16} />} label="Поиск" active={currentScreen === 'search'} onClick={() => navigate('search')} theme={themeMode} />
             <NavBtn icon={<IconPlus size={16} />} label="Новая" active={currentScreen === 'add'} onClick={() => navigate('add')} theme={themeMode} />

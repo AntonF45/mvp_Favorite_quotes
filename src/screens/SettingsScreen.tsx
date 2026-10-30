@@ -159,7 +159,7 @@ export default function SettingsScreen({ theme, onBack }: Props) {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className={`relative w-full p-8 ${paper}`}
+              className={`relative w-full p-8 rounded-t-3xl ${paper}`}
             >
               <div className="flex items-center justify-between mb-6">
                 <span className={`text-[10px] tracking-editorial uppercase text-[#c0392b]`}>— Внимание —</span>
@@ -176,13 +176,13 @@ export default function SettingsScreen({ theme, onBack }: Props) {
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className={`flex-1 py-4 border text-[11px] tracking-editorial uppercase ${ruleBorder} ${ink}`}
+                  className={`flex-1 py-4 rounded-xl border text-[11px] tracking-editorial uppercase ${ruleBorder} ${ink}`}
                 >
                   Отмена
                 </button>
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="flex-1 py-4 bg-[#c0392b] text-[#f5f0e8] text-[11px] tracking-editorial uppercase"
+                  className="flex-1 py-4 rounded-xl bg-[#c0392b] text-[#f5f0e8] text-[11px] tracking-editorial uppercase"
                 >
                   Удалить всё
                 </button>

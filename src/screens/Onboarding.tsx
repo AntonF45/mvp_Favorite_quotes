@@ -26,26 +26,17 @@ export default function Onboarding({ theme, onStart }: Props) {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col justify-center px-8">
-        {/* Giant decorative quote mark */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className={`font-editorial ${accent} opacity-40 leading-none mb-4`}
-          style={{ fontSize: '120px', lineHeight: 0.8 }}
-        >
-          «
-        </motion.div>
-
-        {/* Title */}
+        {/* Title with inline quote */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="font-editorial text-[40px] leading-[1.05] tracking-tight mb-6"
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="font-editorial text-[38px] leading-[1.1] tracking-tight mb-6"
         >
+          <span className={`${accent} text-[44px] mr-1`}>"</span>
           Любимые<br />
           <span className={accent}>цитаты</span>
+          <span className={`${accent} text-[44px] ml-1`}>"</span>
         </motion.h1>
 
         {/* Hairline */}
@@ -86,7 +77,7 @@ export default function Onboarding({ theme, onStart }: Props) {
               transition={{ delay: 0.6 + i * 0.1 }}
               className="flex items-baseline gap-4"
             >
-              <span className={`text-[11px] tracking-editorial ${accent} font-editorial italic w-6`}>
+              <span className={`text-[11px] tracking-editorial ${accent} w-6 font-medium`}>
                 {item.n}
               </span>
               <span className={`text-[13px] ${ink}`}>{item.text}</span>
@@ -102,7 +93,7 @@ export default function Onboarding({ theme, onStart }: Props) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9 }}
           onClick={onStart}
-          className={`w-full py-5 flex items-center justify-between px-6 border transition-all active:scale-[0.98] ${
+          className={`w-full py-4 flex items-center justify-between px-6 rounded-xl border transition-all active:scale-[0.98] ${
             isLight
               ? 'bg-[#1c1c1c] text-[#f5f0e8] border-[#1c1c1c] hover:bg-[#3d3d3d]'
               : 'bg-[#e8e2d6] text-[#171512] border-[#e8e2d6] hover:bg-[#d4cdc2]'

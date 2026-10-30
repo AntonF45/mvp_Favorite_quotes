@@ -65,16 +65,13 @@ export default function AddQuote({ theme, onBack, onSave }: Props) {
           <label className={`text-[10px] tracking-editorial uppercase ${accent} block mb-4`}>
             — Текст цитаты —
           </label>
-          <div className="relative">
-            <span className={`font-editorial ${accent} opacity-30 absolute -top-4 -left-1`} style={{ fontSize: '60px', lineHeight: 1 }}>
-              «
-            </span>
+          <div className={`p-4 rounded-xl ${isLight ? 'bg-[#ede7db]' : 'bg-[#1e1c18]'}`}>
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Цитата, которая стоит сохранения..."
               rows={4}
-              className={`w-full pl-2 text-[18px] font-editorial leading-[1.4] tracking-tight resize-none focus:outline-none placeholder:${isLight ? 'text-[#b5afa6]' : 'text-[#4a4640]'} ${ink} bg-transparent`}
+              className={`w-full text-[17px] font-editorial leading-[1.45] tracking-tight resize-none focus:outline-none ${ink} bg-transparent`}
             />
           </div>
           <div className={`text-right text-[10px] tracking-editorial ${muted} mt-2 tabular-nums`}>
@@ -128,7 +125,7 @@ export default function AddQuote({ theme, onBack, onSave }: Props) {
                       : `${muted} border-transparent`
                   }`}
                 >
-                  <span className={`font-editorial italic ${muted} mr-1`}>{String(i + 1).padStart(2, '0')}.</span>
+                  <span className={`${muted} mr-1 font-medium`}>{String(i + 1).padStart(2, '0')}.</span>
                   {tag}
                 </button>
               );
@@ -166,10 +163,10 @@ export default function AddQuote({ theme, onBack, onSave }: Props) {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.1 }}
-              className="text-center px-8"
+              className={`text-center px-8 py-10 rounded-3xl ${isLight ? 'bg-[#ede7db]' : 'bg-[#1e1c18]'} shadow-xl`}
             >
-              <div className={`w-12 h-12 mx-auto mb-6 rounded-full border-2 ${accent} flex items-center justify-center`}>
-                <IconCheck size={20} className={accent} />
+              <div className={`w-14 h-14 mx-auto mb-6 rounded-full border-2 ${accent} flex items-center justify-center`}>
+                <IconCheck size={22} className={accent} />
               </div>
               <div className={`text-[10px] tracking-editorial uppercase ${muted} mb-3`}>— Готово —</div>
               <h3 className="font-editorial text-[24px] leading-tight">

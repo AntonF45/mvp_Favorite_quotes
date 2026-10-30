@@ -124,9 +124,9 @@ body {
 /* Placeholder styling */
 textarea::placeholder,
 input::placeholder {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 300;
+  font-family: var(--font-sans);
+  font-style: normal;
+  font-weight: 400;
 }
 
 /* Tabular numbers */
@@ -138,4 +138,21 @@ input::placeholder {
 ::selection {
   background: rgba(184, 115, 51, 0.2);
   color: inherit;
+}
+
+/* Soft rounded corners for cards */
+.soft-card {
+  border-radius: 16px;
+}
+
+.soft-card-lg {
+  border-radius: 24px;
+}
+
+.soft-btn {
+  border-radius: 999px;
+}
+
+.soft-btn-md {
+  border-radius: 12px;
 }

@@ -93,7 +93,7 @@ export default function ScreenMap({ theme, onNavigate }: Props) {
               className={`py-4 border-b ${ruleBorder}`}
             >
               <div className="flex items-baseline gap-3 mb-3">
-                <span className={`font-editorial italic text-[12px] ${accent}`}>{flow.num}</span>
+                <span className={`text-[12px] ${accent} font-medium`}>{flow.num}</span>
                 <span className={`text-[13px] ${ink}`}>{flow.title}</span>
               </div>
               <div className="flex items-center gap-2 flex-wrap pl-7">
@@ -121,7 +121,7 @@ export default function ScreenMap({ theme, onNavigate }: Props) {
               transition={{ delay: 0.5 + i * 0.05 }}
               className={`py-3 border-b ${ruleBorder} flex items-baseline gap-4`}
             >
-              <span className={`font-editorial italic text-[12px] ${accent} w-5`}>{state.num}</span>
+              <span className={`text-[12px] ${accent} w-5 font-medium`}>{state.num}</span>
               <div className="flex-1">
                 <div className={`text-[13px] ${ink}`}>{state.name}</div>
                 <div className={`text-[11px] ${muted} mt-0.5`}>{state.desc}</div>
@@ -149,7 +149,7 @@ export default function ScreenMap({ theme, onNavigate }: Props) {
                 transition={{ delay: 0.7 + i * 0.05 }}
                 className="flex items-baseline gap-3"
               >
-                <span className={`font-editorial italic text-[11px] ${accent}`}>
+                <span className={`text-[11px] ${accent} font-medium`}>
                   {String(i + 1).padStart(2, '0')}.
                 </span>
                 <span className={`text-[12px] leading-relaxed ${ink}`}>{p}</span>

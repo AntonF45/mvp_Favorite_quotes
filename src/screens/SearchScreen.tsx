@@ -139,7 +139,7 @@ export default function SearchScreen({ theme, onBack, onNavigate }: Props) {
                           selected ? `${accent} border-current` : `${muted} border-transparent`
                         }`}
                       >
-                        <span className={`font-editorial italic ${muted} mr-1`}>{String(i + 1).padStart(2, '0')}.</span>
+                        <span className={`${muted} mr-1 font-medium`}>{String(i + 1).padStart(2, '0')}.</span>
                         {tag}
                       </button>
                     );
@@ -161,21 +161,20 @@ export default function SearchScreen({ theme, onBack, onNavigate }: Props) {
                     onClick={() => onNavigate('card')}
                     className={`w-full text-left py-4 border-b ${ruleBorder} group`}
                   >
-                    <div className="flex gap-5">
-                      <span className={`font-editorial text-[12px] ${muted} pt-1 w-6 tabular-nums`}>
-                        {String(i + 1).padStart(2, '0')}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-editorial text-[14px] leading-[1.35] tracking-tight line-clamp-2">
-                          {q.text}
-                        </p>
-                        <div className="flex items-center gap-3 mt-2">
-                          <span className={`text-[11px] tracking-editorial uppercase ${accent}`}>{q.author}</span>
-                          {q.favorite && <IconStarFilled size={10} className={accent} />}
-                        </div>
+                  <div className="flex gap-5">
+                    <span className={`text-[12px] ${muted} pt-1 w-6 tabular-nums font-medium`}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-editorial text-[14px] leading-[1.4] tracking-tight line-clamp-2">
+                        {q.text}
+                      </p>
+                      <div className="flex items-center gap-3 mt-2">
+                        <span className={`text-[11px] tracking-editorial uppercase ${accent}`}>{q.author}</span>
+                        {q.favorite && <IconStarFilled size={10} className={accent} />}
                       </div>
                     </div>
-                  </motion.button>
+                  </div>                  </motion.button>
                 ))}
               </div>
             </motion.div>
@@ -196,11 +195,11 @@ export default function SearchScreen({ theme, onBack, onNavigate }: Props) {
                   className={`w-full text-left py-4 border-b ${ruleBorder}`}
                 >
                   <div className="flex gap-5">
-                    <span className={`font-editorial text-[12px] ${muted} pt-1 w-6 tabular-nums`}>
+                    <span className={`text-[12px] ${muted} pt-1 w-6 tabular-nums font-medium`}>
                       {String(i + 1).padStart(2, '0')}
                     </span>
                     <div className="flex-1 min-w-0">
-                      <p className="font-editorial text-[14px] leading-[1.35] tracking-tight line-clamp-2">
+                      <p className="font-editorial text-[14px] leading-[1.4] tracking-tight line-clamp-2">
                         {q.text}
                       </p>
                       <div className="flex items-center gap-3 mt-2">
@@ -221,8 +220,8 @@ export default function SearchScreen({ theme, onBack, onNavigate }: Props) {
               exit={{ opacity: 0 }}
               className="flex flex-col items-center justify-center py-20 text-center"
             >
-              <div className={`font-editorial ${accent} opacity-30 mb-6`} style={{ fontSize: '80px', lineHeight: 0.8 }}>
-                ∅
+              <div className={`w-16 h-16 rounded-full border-2 ${ruleBorder} flex items-center justify-center mb-6`}>
+                <IconSearch size={24} className={muted} />
               </div>
               <div className={`text-[10px] tracking-editorial uppercase ${muted} mb-3`}>— Ничего не найдено —</div>
               <h3 className="font-editorial text-[22px] leading-tight mb-3">
