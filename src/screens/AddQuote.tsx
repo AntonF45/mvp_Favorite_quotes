@@ -1,18 +1,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, X, Check, BookOpen, Film, Mic, MessageCircle } from 'lucide-react';
-
-type DesignVariant = 'minimal' | 'emotional';
-type ThemeMode = 'light' | 'dark';
+import { IconArrowLeft, IconCheck } from '../components/Icons';
+import type { ThemeMode } from '../types';
 
 interface Props {
-  variant: DesignVariant;
   theme: ThemeMode;
   onBack: () => void;
   onSave: () => void;
 }
 
-export default function AddQuote({ variant, theme, onBack, onSave }: Props) {
+export default function AddQuote({ theme, onBack, onSave }: Props) {
   const [text, setText] = useState('');
   const [author, setAuthor] = useState('');
   const [source, setSource] = useState('');
@@ -20,58 +17,40 @@ export default function AddQuote({ variant, theme, onBack, onSave }: Props) {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [showSuccess, setShowSuccess] = useState(false);
   const isLight = theme === 'light';
-  const isEmotional = variant === 'emotional';
+  const paper = isLight ? 'bg-[#f5f0e8]' : 'bg-[#171512]';
+  const ink = isLight ? 'text-[#1c1c1c]' : 'text-[#e8e2d6]';
+  const muted = isLight ? 'text-[#8a8580]' : 'text-[#7a7368]';
+  const rule = isLight ? 'bg-[#d4cdc2]' : 'bg-[#2e2b25]';
+  const ruleBorder = isLight ? 'border-[#d4cdc2]' : 'border-[#2e2b25]';
+  const accent = isLight ? 'text-[#b87333]' : 'text-[#d4944a]';
+  const fieldBg = isLight ? 'bg-transparent' : 'bg-transparent';
 
-  const availableTags = [
-    { id: 'философия', emoji: '🧠' },
-    { id: 'мотивация', emoji: '🔥' },
-    { id: 'жизнь', emoji: '🌱' },
-    { id: 'любовь', emoji: '❤️' },
-    { id: 'мудрость', emoji: '🦉' },
-    { id: 'юмор', emoji: '😄' },
-    { id: 'работа', emoji: '💼' },
-    { id: 'творчество', emoji: '🎨' },
-  ];
-
-  const sources = [
-    { id: 'book', label: 'Книга', emoji: '📚' },
-    { id: 'film', label: 'Фильм', emoji: '🎬' },
-    { id: 'podcast', label: 'Подкаст', emoji: '🎙️' },
-    { id: 'life', label: 'Разговор', emoji: '💬' },
-  ];
+  const availableTags = ['философия', 'мотивация', 'жизнь', 'любовь', 'мудрость', 'юмор', 'работа', 'творчество'];
 
   const toggleTag = (tag: string) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
-    );
+    setSelectedTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
   };
 
   const handleSave = () => {
     setShowSuccess(true);
-    setTimeout(() => {
-      onSave();
-    }, 1500);
+    setTimeout(() => onSave(), 1400);
   };
 
   return (
-    <div className={`h-full w-full flex flex-col ${isLight ? 'bg-warm-bg' : 'bg-dark-bg'} pt-10`}>
+    <div className={`h-full w-full flex flex-col ${paper} ${ink} pt-10`}>
       {/* Header */}
-      <div className={`flex items-center justify-between px-5 py-3 border-b ${
-        isLight ? 'border-warm-border' : 'border-dark-border'
-      }`}>
-        <button onClick={onBack} className={`p-1.5 rounded-lg ${isLight ? 'text-warm-muted' : 'text-dark-muted'}`}>
-          <ArrowLeft size={20} />
+      <div className={`px-7 pt-5 pb-4 flex items-center justify-between border-b ${ruleBorder}`}>
+        <button onClick={onBack} className={`p-1 ${muted}`}>
+          <IconArrowLeft size={20} />
         </button>
-        <h2 className={`text-base font-semibold ${isLight ? 'text-warm-text' : 'text-dark-text'}`}>
-          Новая цитата
-        </h2>
+        <div className="text-center">
+          <div className={`text-[10px] tracking-editorial uppercase ${muted}`}>Новая запись</div>
+        </div>
         <button
           onClick={handleSave}
           disabled={!text.trim()}
-          className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${
-            text.trim()
-              ? isLight ? 'bg-deep-blue text-white' : 'bg-amber text-dark-bg'
-              : isLight ? 'bg-gray-200 text-gray-400' : 'bg-gray-700 text-gray-500'
+          className={`text-[11px] tracking-editorial uppercase transition-all ${
+            text.trim() ? accent : muted
           }`}
         >
           Сохранить
@@ -79,152 +58,120 @@ export default function AddQuote({ variant, theme, onBack, onSave }: Props) {
       </div>
 
       {/* Form */}
-      <div className="flex-1 overflow-y-auto scrollbar-hide px-5 py-4 space-y-5">
-        {/* Quote Text */}
-        <div>
-          <label className={`text-xs font-medium uppercase tracking-wider mb-2 block ${
-            isLight ? 'text-warm-muted' : 'text-dark-muted'
-          }`}>
-            Текст цитаты *
+      <div className="flex-1 overflow-y-auto scrollbar-hide px-7 py-6">
+        {/* Field: Quote */}
+        <div className="mb-8">
+          <label className={`text-[10px] tracking-editorial uppercase ${accent} block mb-4`}>
+            — Текст цитаты —
           </label>
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Введите цитату..."
-            rows={4}
-            className={`w-full p-3 rounded-xl text-sm leading-relaxed resize-none transition-all focus:outline-none focus:ring-2 ${
-              isLight 
-                ? 'bg-white border border-warm-border focus:ring-deep-blue/30 text-warm-text placeholder:text-gray-300' 
-                : 'bg-dark-card border border-dark-border focus:ring-amber/30 text-dark-text placeholder:text-gray-600'
-            } ${isEmotional ? 'italic' : ''}`}
-            style={isEmotional ? { fontFamily: 'Playfair Display, serif' } : {}}
-          />
-          <div className={`text-right text-[10px] mt-1 ${isLight ? 'text-warm-muted' : 'text-dark-muted'}`}>
-            {text.length} символов
+          <div className={`p-4 rounded-xl ${isLight ? 'bg-[#ede7db]' : 'bg-[#1e1c18]'}`}>
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Цитата, которая стоит сохранения..."
+              rows={4}
+              className={`w-full text-[17px] font-editorial leading-[1.45] tracking-tight resize-none focus:outline-none ${ink} bg-transparent`}
+            />
+          </div>
+          <div className={`text-right text-[10px] tracking-editorial ${muted} mt-2 tabular-nums`}>
+            {String(text.length).padStart(3, '0')}
           </div>
         </div>
 
-        {/* Author */}
-        <div>
-          <label className={`text-xs font-medium uppercase tracking-wider mb-2 block ${
-            isLight ? 'text-warm-muted' : 'text-dark-muted'
-          }`}>
-            Автор
+        <div className={`h-px ${rule} mb-8`} />
+
+        {/* Field: Author */}
+        <div className="mb-8">
+          <label className={`text-[10px] tracking-editorial uppercase ${accent} block mb-3`}>
+            — Автор —
           </label>
           <input
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
-            placeholder="Кто сказал?"
-            className={`w-full p-3 rounded-xl text-sm transition-all focus:outline-none focus:ring-2 ${
-              isLight 
-                ? 'bg-white border border-warm-border focus:ring-deep-blue/30 text-warm-text placeholder:text-gray-300' 
-                : 'bg-dark-card border border-dark-border focus:ring-amber/30 text-dark-text placeholder:text-gray-600'
-            }`}
+            placeholder="Кто произнёс эти слова"
+            className={`w-full pb-2 text-[16px] font-editorial tracking-tight border-b ${ruleBorder} focus:outline-none focus:border-current ${accent} ${ink} bg-transparent placeholder:${isLight ? 'text-[#b5afa6]' : 'text-[#4a4640]'}`}
           />
         </div>
 
-        {/* Source */}
-        <div>
-          <label className={`text-xs font-medium uppercase tracking-wider mb-2 block ${
-            isLight ? 'text-warm-muted' : 'text-dark-muted'
-          }`}>
-            Источник
+        {/* Field: Source */}
+        <div className="mb-8">
+          <label className={`text-[10px] tracking-editorial uppercase ${accent} block mb-3`}>
+            — Источник —
           </label>
-          <div className="flex gap-2 mb-2">
-            {sources.map((s) => (
-              <button
-                key={s.id}
-                onClick={() => setSource(s.label)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
-                  source === s.label
-                    ? isLight ? 'bg-deep-blue text-white' : 'bg-amber text-dark-bg'
-                    : isLight ? 'bg-white border border-warm-border text-warm-text' : 'bg-dark-card border border-dark-border text-dark-text'
-                }`}
-              >
-                <span>{s.emoji}</span>
-                {s.label}
-              </button>
-            ))}
-          </div>
           <input
             value={source}
             onChange={(e) => setSource(e.target.value)}
-            placeholder="Название книги, фильма..."
-            className={`w-full p-3 rounded-xl text-sm transition-all focus:outline-none focus:ring-2 ${
-              isLight 
-                ? 'bg-white border border-warm-border focus:ring-deep-blue/30 text-warm-text placeholder:text-gray-300' 
-                : 'bg-dark-card border border-dark-border focus:ring-amber/30 text-dark-text placeholder:text-gray-600'
-            }`}
+            placeholder="Книга, фильм, разговор..."
+            className={`w-full pb-2 text-[14px] tracking-tight border-b ${ruleBorder} focus:outline-none focus:border-current ${accent} ${ink} bg-transparent placeholder:${isLight ? 'text-[#b5afa6]' : 'text-[#4a4640]'}`}
           />
         </div>
 
         {/* Tags */}
-        <div>
-          <label className={`text-xs font-medium uppercase tracking-wider mb-2 block ${
-            isLight ? 'text-warm-muted' : 'text-dark-muted'
-          }`}>
-            Теги
+        <div className="mb-8">
+          <label className={`text-[10px] tracking-editorial uppercase ${accent} block mb-4`}>
+            — Теги —
           </label>
-          <div className="flex flex-wrap gap-2">
-            {availableTags.map((tag) => (
-              <button
-                key={tag.id}
-                onClick={() => toggleTag(tag.id)}
-                className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-                  selectedTags.includes(tag.id)
-                    ? isLight ? 'bg-deep-blue text-white' : 'bg-amber text-dark-bg'
-                    : isLight ? 'bg-white border border-warm-border text-warm-text' : 'bg-dark-card border border-dark-border text-dark-text'
-                }`}
-              >
-                <span>{tag.emoji}</span>
-                {tag.id}
-              </button>
-            ))}
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
+            {availableTags.map((tag, i) => {
+              const selected = selectedTags.includes(tag);
+              return (
+                <button
+                  key={tag}
+                  onClick={() => toggleTag(tag)}
+                  className={`text-[12px] tracking-wide pb-0.5 border-b transition-all ${
+                    selected
+                      ? `${accent} border-current`
+                      : `${muted} border-transparent`
+                  }`}
+                >
+                  <span className={`${muted} mr-1 font-medium`}>{String(i + 1).padStart(2, '0')}.</span>
+                  {tag}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* Personal Comment */}
+        <div className={`h-px ${rule} mb-8`} />
+
+        {/* Comment */}
         <div>
-          <label className={`text-xs font-medium uppercase tracking-wider mb-2 block ${
-            isLight ? 'text-warm-muted' : 'text-dark-muted'
-          }`}>
-            Личный комментарий
+          <label className={`text-[10px] tracking-editorial uppercase ${accent} block mb-3`}>
+            — Личный комментарий —
           </label>
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            placeholder="Почему эта цитата важна для вас?"
-            rows={2}
-            className={`w-full p-3 rounded-xl text-sm leading-relaxed resize-none transition-all focus:outline-none focus:ring-2 ${
-              isLight 
-                ? 'bg-white border border-warm-border focus:ring-deep-blue/30 text-warm-text placeholder:text-gray-300' 
-                : 'bg-dark-card border border-dark-border focus:ring-amber/30 text-dark-text placeholder:text-gray-600'
-            }`}
+            placeholder="Почему это важно для вас..."
+            rows={3}
+            className={`w-full text-[14px] leading-[1.6] resize-none focus:outline-none ${ink} bg-transparent placeholder:${isLight ? 'text-[#b5afa6]' : 'text-[#4a4640]'}`}
           />
         </div>
       </div>
 
-      {/* Success Toast */}
+      {/* Success overlay */}
       <AnimatePresence>
         {showSuccess && (
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            className="absolute bottom-8 left-5 right-5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className={`absolute inset-0 flex items-center justify-center ${paper} z-50`}
           >
-            <div className={`flex items-center gap-3 p-4 rounded-2xl shadow-lg ${
-              isLight ? 'bg-green-50 border border-green-200' : 'bg-green-900/30 border border-green-700'
-            }`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                isLight ? 'bg-green-100' : 'bg-green-800'
-              }`}>
-                <Check size={16} className={isLight ? 'text-green-600' : 'text-green-300'} />
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.1 }}
+              className={`text-center px-8 py-10 rounded-3xl ${isLight ? 'bg-[#ede7db]' : 'bg-[#1e1c18]'} shadow-xl`}
+            >
+              <div className={`w-14 h-14 mx-auto mb-6 rounded-full border-2 ${accent} flex items-center justify-center`}>
+                <IconCheck size={22} className={accent} />
               </div>
-              <span className={`text-sm font-medium ${isLight ? 'text-green-800' : 'text-green-200'}`}>
-                Цитата сохранена!
-              </span>
-            </div>
+              <div className={`text-[10px] tracking-editorial uppercase ${muted} mb-3`}>— Готово —</div>
+              <h3 className="font-editorial text-[24px] leading-tight">
+                Цитата<br />сохранена
+              </h3>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

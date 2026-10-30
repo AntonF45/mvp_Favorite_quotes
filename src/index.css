@@ -1,27 +1,38 @@
 @import "tailwindcss";
 
 @theme {
-  --color-deep-blue: #1a2744;
-  --color-deep-blue-light: #2a3f6b;
-  --color-amber: #e8a838;
-  --color-amber-light: #f5c563;
-  --color-amber-dark: #c4872a;
-  --color-warm-bg: #faf8f5;
-  --color-warm-card: #ffffff;
-  --color-warm-text: #2d2d2d;
-  --color-warm-muted: #8a8a8a;
-  --color-warm-border: #e8e4df;
-  --color-dark-bg: #0f1419;
-  --color-dark-card: #1a2028;
-  --color-dark-text: #e8e4df;
-  --color-dark-muted: #7a8599;
-  --color-dark-border: #2a3040;
+  /* Paper & Ink palette */
+  --color-paper: #f5f0e8;
+  --color-paper-warm: #ede7db;
+  --color-paper-deep: #e5ddd0;
+  --color-ink: #1c1c1c;
+  --color-ink-soft: #3d3d3d;
+  --color-ink-muted: #8a8580;
+  --color-ink-faint: #b5afa6;
+  --color-rule: #d4cdc2;
+  --color-rule-light: #e5dfd6;
+  --color-accent: #b87333;
+  --color-accent-soft: #c9956a;
+  --color-accent-faint: rgba(184, 115, 51, 0.08);
+
+  /* Dark theme — aged paper at night */
+  --color-night: #171512;
+  --color-night-card: #1e1c18;
+  --color-night-ink: #e8e2d6;
+  --color-night-muted: #7a7368;
+  --color-night-rule: #2e2b25;
+  --color-night-accent: #d4944a;
+
+  --font-serif: 'Playfair Display', 'Georgia', serif;
   --font-sans: 'Inter', system-ui, sans-serif;
-  --font-serif: 'Playfair Display', Georgia, serif;
 }
 
 * {
   -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  background: #2a2825;
 }
 
 body {
@@ -30,32 +41,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Phone frame — editorial presentation */
 .phone-frame {
   width: 390px;
   height: 844px;
-  border-radius: 40px;
+  border-radius: 44px;
   overflow: hidden;
   position: relative;
-  box-shadow: 
-    0 0 0 2px #1a1a1a,
-    0 0 0 6px #333,
-    0 0 0 8px #1a1a1a,
-    0 30px 60px rgba(0,0,0,0.4),
-    0 10px 20px rgba(0,0,0,0.2);
-  background: #000;
-}
-
-.phone-frame::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 40px;
-  border: 1px solid rgba(255,255,255,0.1);
-  pointer-events: none;
-  z-index: 100;
+  background: #0c0b0a;
+  box-shadow:
+    inset 0 0 0 1.5px #2a2825,
+    0 0 0 3px #1a1917,
+    0 40px 80px -20px rgba(0,0,0,0.5),
+    0 20px 40px -10px rgba(0,0,0,0.3);
 }
 
 .phone-notch {
@@ -63,50 +61,16 @@ body {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 160px;
+  width: 126px;
   height: 34px;
-  background: #000;
+  background: #0c0b0a;
   border-radius: 0 0 20px 20px;
   z-index: 50;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(100%); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(232, 168, 56, 0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(232, 168, 56, 0); }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-out forwards;
-}
-
-.animate-slide-up {
-  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-/* Line clamp utility */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -114,15 +78,81 @@ body {
   overflow: hidden;
 }
 
-/* Custom scrollbar for desktop */
-@media (min-width: 768px) {
-  .scrollbar-hide {
-    overflow-y: auto;
-  }
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Telegram-like background patterns */
-.tg-pattern {
-  background-image: radial-gradient(circle at 20% 50%, rgba(232, 168, 56, 0.03) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 20%, rgba(26, 39, 68, 0.03) 0%, transparent 50%);
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes drawLine {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+.animate-slide-up { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-draw-line { animation: drawLine 0.8s ease-out forwards; transform-origin: left; }
+
+/* Editorial typography helpers */
+.font-editorial {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.tracking-editorial {
+  letter-spacing: 0.12em;
+}
+
+/* Thin rule */
+.hairline {
+  height: 0.5px;
+  background: currentColor;
+  opacity: 0.15;
+}
+
+/* Placeholder styling */
+textarea::placeholder,
+input::placeholder {
+  font-family: var(--font-sans);
+  font-style: normal;
+  font-weight: 400;
+}
+
+/* Tabular numbers */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(184, 115, 51, 0.2);
+  color: inherit;
+}
+
+/* Soft rounded corners for cards */
+.soft-card {
+  border-radius: 16px;
+}
+
+.soft-card-lg {
+  border-radius: 24px;
+}
+
+.soft-btn {
+  border-radius: 999px;
+}
+
+.soft-btn-md {
+  border-radius: 12px;
 }
