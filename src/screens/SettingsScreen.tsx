@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IconArrowLeft, IconSun, IconMoon, IconBell, IconDownload, IconTrash, IconShield, IconClose } from '../components/Icons';
-
-type ThemeMode = 'light' | 'dark';
+import type { ThemeMode } from '../types';
 
 interface Props {
   theme: ThemeMode;
   onBack: () => void;
+  setTheme: (theme: ThemeMode) => void;
 }
 
-export default function SettingsScreen({ theme, onBack }: Props) {
+export default function SettingsScreen({ theme, onBack, setTheme }: Props) {
   const [reminderEnabled, setReminderEnabled] = useState(true);
   const [reminderTime, setReminderTime] = useState('09:00');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -51,7 +51,7 @@ export default function SettingsScreen({ theme, onBack }: Props) {
                 <div className={`text-[11px] ${muted} mt-0.5`}>{isLight ? 'Выключена' : 'Включена'}</div>
               </div>
             </div>
-            <Toggle active={!isLight} onToggle={() => {}} isLight={isLight} />
+            <Toggle active={!isLight} onToggle={() => setTheme(isLight ? 'dark' : 'light')} isLight={isLight} />
           </div>
         </div>
 

@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
-import { IconArrowRight, IconQuote } from '../components/Icons';
-
-type ThemeMode = 'light' | 'dark';
+import { IconArrowRight } from '../components/Icons';
+import type { ThemeMode } from '../types';
 
 interface Props {
   theme: ThemeMode;
@@ -26,17 +25,16 @@ export default function Onboarding({ theme, onStart }: Props) {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col justify-center px-8">
-        {/* Title with inline quote */}
+        {/* Title */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="font-editorial text-[38px] leading-[1.1] tracking-tight mb-6"
+          className="font-editorial text-[44px] leading-[1.05] tracking-tight mb-6"
         >
-          <span className={`${accent} text-[44px] mr-1`}>"</span>
-          Любимые<br />
-          <span className={accent}>цитаты</span>
-          <span className={`${accent} text-[44px] ml-1`}>"</span>
+          <span className={`${accent} text-[50px] mr-1`}>"</span>
+          Цитаты<span className={accent}>.</span>
+          <span className={`${accent} text-[50px] ml-1`}>"</span>
         </motion.h1>
 
         {/* Hairline */}
@@ -54,8 +52,7 @@ export default function Onboarding({ theme, onStart }: Props) {
           transition={{ duration: 0.6, delay: 0.4 }}
           className={`text-[15px] leading-[1.6] ${muted} max-w-[300px] mb-10`}
         >
-          Тихое место для мыслей, которые стоит сохранить.
-          Из книг, фильмов, разговоров и дней, которые вы не хотите забыть.
+          Тихое место для мыслей, которые стоит сохранить. Из книг, фильмов, разговоров и дней, которые вы не хотите забыть.
         </motion.p>
 
         {/* Feature list — numbered */}

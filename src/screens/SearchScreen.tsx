@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IconArrowLeft, IconSearch, IconClose, IconStarFilled } from '../components/Icons';
-
-type Screen = 'onboarding' | 'home' | 'add' | 'card' | 'search' | 'settings' | 'map';
-type ThemeMode = 'light' | 'dark';
-type SearchState = 'default' | 'results' | 'empty';
+import type { Screen, ThemeMode } from '../types';
 
 interface Props {
   theme: ThemeMode;
@@ -24,7 +21,6 @@ const allTags = ['философия', 'привычки', 'жизнь', 'муж
 
 export default function SearchScreen({ theme, onBack, onNavigate }: Props) {
   const [query, setQuery] = useState('');
-  const [state, setState] = useState<SearchState>('default');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const isLight = theme === 'light';
@@ -42,16 +38,12 @@ export default function SearchScreen({ theme, onBack, onNavigate }: Props) {
     return matchesQuery && matchesTags && matchesFavorites;
   });
 
-  const handleSearch = (value: string) => {
-    setQuery(value);
-    if (value.trim()) setState('results');
-    else if (!selectedTags.length && !showFavoritesOnly) setState('default');
-  };
-
   const toggleTag = (tag: string) => {
     setSelectedTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
-    setState('results');
   };
+
+  const hasResults = filteredQuotes.length > 0;
+  const hasFilters = query || selectedTags.length > 0 || showFavoritesOnly;
 
   return (
     <div className={`h-full w-full flex flex-col ${paper} ${ink} pt-10`}>
@@ -69,170 +61,116 @@ export default function SearchScreen({ theme, onBack, onNavigate }: Props) {
           </div>
         </div>
 
-        {/* Search field — editorial underline */}
+        {/* Search field */}
         <div className="relative">
           <IconSearch size={16} className={`absolute left-0 top-1/2 -translate-y-1/2 ${muted}`} />
           <input
             value={query}
-            onChange={(e) => handleSearch(e.target.value)}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="Текст или автор..."
             className={`w-full pl-7 pr-7 pb-3 text-[15px] font-editorial border-b ${ruleBorder} focus:outline-none focus:border-current ${accent} ${ink} bg-transparent placeholder:${isLight ? 'text-[#b5afa6]' : 'text-[#4a4640]'}`}
           />
           {query && (
-            <button onClick={() => { setQuery(''); setState('default'); }} className={`absolute right-0 top-1/2 -translate-y-1/2 ${muted}`}>
+            <button onClick={() => setQuery('')} className={`absolute right-0 top-1/2 -translate-y-1/2 ${muted}`}>
               <IconClose size={14} />
             </button>
           )}
-        </div>
-
-        {/* State switcher */}
-        <div className="mt-5 flex items-center gap-3">
-          <span className={`text-[9px] tracking-editorial uppercase ${muted}`}>Вид:</span>
-          {([
-            { id: 'default', label: 'Все' },
-            { id: 'results', label: 'Результаты' },
-            { id: 'empty', label: 'Пусто' },
-          ] as { id: SearchState; label: string }[]).map((s) => (
-            <button
-              key={s.id}
-              onClick={() => setState(s.id)}
-              className={`text-[10px] tracking-editorial uppercase pb-0.5 border-b transition-all ${
-                state === s.id ? `${accent} border-current` : `${muted} border-transparent`
-              }`}
-            >
-              {s.label}
-            </button>
-          ))}
         </div>
       </div>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto scrollbar-hide px-7 pb-20">
-        <AnimatePresence mode="wait">
-          {state === 'default' && (
-            <motion.div key="d" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              {/* Favorites toggle */}
-              <button
-                onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                className={`w-full flex items-center justify-between py-4 border-b ${ruleBorder} mb-2`}
-              >
-                <div className="flex items-center gap-3">
-                  <IconStarFilled size={14} className={showFavoritesOnly ? accent : muted} />
-                  <span className={`text-[12px] tracking-wide ${ink}`}>Только избранные</span>
-                </div>
-                <div className={`w-8 h-[18px] rounded-full border transition-all flex items-center ${showFavoritesOnly ? (isLight ? 'bg-[#b87333] border-[#b87333]' : 'bg-[#d4944a] border-[#d4944a]') : ruleBorder}`}>
-                  <div className={`w-[14px] h-[14px] rounded-full transition-transform ${showFavoritesOnly ? 'translate-x-[16px]' : 'translate-x-[2px]'} ${isLight ? 'bg-[#f5f0e8]' : 'bg-[#171512]'}`} />
-                </div>
-              </button>
+        {/* Favorites toggle */}
+        <button
+          onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+          className={`w-full flex items-center justify-between py-4 border-b ${ruleBorder} mb-2`}
+        >
+          <div className="flex items-center gap-3">
+            <IconStarFilled size={14} className={showFavoritesOnly ? accent : muted} />
+            <span className={`text-[12px] tracking-wide ${ink}`}>Только избранные</span>
+          </div>
+          <div className={`w-8 h-[18px] rounded-full border transition-all flex items-center ${showFavoritesOnly ? (isLight ? 'bg-[#b87333] border-[#b87333]' : 'bg-[#d4944a] border-[#d4944a]') : ruleBorder}`}>
+            <div className={`w-[14px] h-[14px] rounded-full transition-transform ${showFavoritesOnly ? 'translate-x-[16px]' : 'translate-x-[2px]'} ${isLight ? 'bg-[#f5f0e8]' : 'bg-[#171512]'}`} />
+          </div>
+        </button>
 
-              {/* Tags filter */}
-              <div className="mb-6">
-                <div className={`text-[10px] tracking-editorial uppercase ${muted} mb-3`}>— Фильтр по тегам —</div>
-                <div className="flex flex-wrap gap-x-5 gap-y-2">
-                  {allTags.map((tag, i) => {
-                    const selected = selectedTags.includes(tag);
-                    return (
-                      <button
-                        key={tag}
-                        onClick={() => toggleTag(tag)}
-                        className={`text-[12px] tracking-wide pb-0.5 border-b transition-all ${
-                          selected ? `${accent} border-current` : `${muted} border-transparent`
-                        }`}
-                      >
-                        <span className={`${muted} mr-1 font-medium`}>{String(i + 1).padStart(2, '0')}.</span>
-                        {tag}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+        {/* Tags filter */}
+        <div className="mb-6">
+          <div className={`text-[10px] tracking-editorial uppercase ${muted} mb-3`}>— Фильтр по тегам —</div>
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
+            {allTags.map((tag, i) => {
+              const selected = selectedTags.includes(tag);
+              return (
+                <button
+                  key={tag}
+                  onClick={() => toggleTag(tag)}
+                  className={`text-[12px] tracking-wide pb-0.5 border-b transition-all ${
+                    selected ? `${accent} border-current` : `${muted} border-transparent`
+                  }`}
+                >
+                  <span className={`${muted} mr-1 font-medium`}>{String(i + 1).padStart(2, '0')}.</span>
+                  {tag}
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
-              <div className={`h-px ${rule} mb-5`} />
+        <div className={`h-px ${rule} mb-5`} />
 
-              {/* All quotes — numbered */}
-              <div className={`text-[10px] tracking-editorial uppercase ${muted} mb-4`}>Вся коллекция</div>
-              <div>
-                {allQuotes.map((q, i) => (
-                  <motion.button
-                    key={q.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: i * 0.05 }}
-                    onClick={() => onNavigate('card')}
-                    className={`w-full text-left py-4 border-b ${ruleBorder} group`}
-                  >
-                  <div className="flex gap-5">
-                    <span className={`text-[12px] ${muted} pt-1 w-6 tabular-nums font-medium`}>
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-editorial text-[14px] leading-[1.4] tracking-tight line-clamp-2">
-                        {q.text}
-                      </p>
-                      <div className="flex items-center gap-3 mt-2">
-                        <span className={`text-[11px] tracking-editorial uppercase ${accent}`}>{q.author}</span>
-                        {q.favorite && <IconStarFilled size={10} className={accent} />}
-                      </div>
-                    </div>
-                  </div>                  </motion.button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {state === 'results' && filteredQuotes.length > 0 && (
-            <motion.div key="r" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              <div className={`text-[10px] tracking-editorial uppercase ${muted} mb-5`}>
+        {/* Results */}
+        {hasResults ? (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            {hasFilters && (
+              <div className={`text-[10px] tracking-editorial uppercase ${muted} mb-4`}>
                 — Найдено: {String(filteredQuotes.length).padStart(2, '0')} —
               </div>
-              {filteredQuotes.map((q, i) => (
-                <motion.button
-                  key={q.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: i * 0.05 }}
-                  onClick={() => onNavigate('card')}
-                  className={`w-full text-left py-4 border-b ${ruleBorder}`}
-                >
-                  <div className="flex gap-5">
-                    <span className={`text-[12px] ${muted} pt-1 w-6 tabular-nums font-medium`}>
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-editorial text-[14px] leading-[1.4] tracking-tight line-clamp-2">
-                        {q.text}
-                      </p>
-                      <div className="flex items-center gap-3 mt-2">
-                        <span className={`text-[11px] tracking-editorial uppercase ${accent}`}>{q.author}</span>
-                      </div>
+            )}
+            {!hasFilters && (
+              <div className={`text-[10px] tracking-editorial uppercase ${muted} mb-4`}>Вся коллекция</div>
+            )}
+            {filteredQuotes.map((q, i) => (
+              <motion.button
+                key={q.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: i * 0.05 }}
+                onClick={() => onNavigate('card')}
+                className={`w-full text-left py-4 border-b ${ruleBorder}`}
+              >
+                <div className="flex gap-5">
+                  <span className={`text-[12px] ${muted} pt-1 w-6 tabular-nums font-medium`}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-editorial text-[14px] leading-[1.4] tracking-tight line-clamp-2">
+                      {q.text}
+                    </p>
+                    <div className="flex items-center gap-3 mt-2">
+                      <span className={`text-[11px] tracking-editorial uppercase ${accent}`}>{q.author}</span>
+                      {q.favorite && <IconStarFilled size={10} className={accent} />}
                     </div>
                   </div>
-                </motion.button>
-              ))}
-            </motion.div>
-          )}
-
-          {state === 'empty' && (
-            <motion.div
-              key="e"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              className="flex flex-col items-center justify-center py-20 text-center"
-            >
-              <div className={`w-16 h-16 rounded-full border-2 ${ruleBorder} flex items-center justify-center mb-6`}>
-                <IconSearch size={24} className={muted} />
-              </div>
-              <div className={`text-[10px] tracking-editorial uppercase ${muted} mb-3`}>— Ничего не найдено —</div>
-              <h3 className="font-editorial text-[22px] leading-tight mb-3">
-                Пусто
-              </h3>
-              <p className={`text-[13px] leading-relaxed ${muted} max-w-[260px]`}>
-                Попробуйте изменить запрос или убрать фильтры
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                </div>
+              </motion.button>
+            ))}
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col items-center justify-center py-20 text-center"
+          >
+            <div className={`w-16 h-16 rounded-full border-2 ${ruleBorder} flex items-center justify-center mb-6`}>
+              <IconSearch size={24} className={muted} />
+            </div>
+            <div className={`text-[10px] tracking-editorial uppercase ${muted} mb-3`}>— Ничего не найдено —</div>
+            <h3 className="font-editorial text-[22px] leading-tight mb-3">Пусто</h3>
+            <p className={`text-[13px] leading-relaxed ${muted} max-w-[260px]`}>
+              Попробуйте изменить запрос или убрать фильтры
+            </p>
+          </motion.div>
+        )}
       </div>
     </div>
   );

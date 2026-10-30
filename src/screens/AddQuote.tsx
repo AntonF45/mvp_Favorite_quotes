@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IconArrowLeft, IconCheck } from '../components/Icons';
-
-type ThemeMode = 'light' | 'dark';
+import type { ThemeMode } from '../types';
 
 interface Props {
   theme: ThemeMode;
